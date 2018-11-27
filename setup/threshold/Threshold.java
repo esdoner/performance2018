@@ -17,5 +17,5 @@ public interface Threshold {
     void createThresholdCalculator();
 
     //判断结果
-    boolean judgment();
+    boolean getJudgment();
 }

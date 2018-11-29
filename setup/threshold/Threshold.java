@@ -5,6 +5,8 @@ package com.fr.performance.setup.threshold;
  * Description:none
  */
 public interface Threshold {
+    String propath = "com/fr/performance/setup/threshold/threshold.properties";
+
     //切换开关
     void toggleSwitch();
 
@@ -15,7 +17,4 @@ public interface Threshold {
 
     //创建阈值判断算子
     void createThresholdCalculator();
-
-    //判断结果
-    boolean getJudgment();
 }

@@ -4,7 +4,7 @@ import com.fr.performance.preanalysis.MemAnalysis;
 
 /**
  * Created by yuwh on 2018/9/26
- * Description:none
+ * Description:内存计算测试
  */
 public class StartMemCalcTest {
     private final String[] a = {"FanRuan","NO.1","^0^"};

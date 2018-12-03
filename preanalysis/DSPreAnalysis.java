@@ -30,6 +30,7 @@ public class DSPreAnalysis extends Analysis{
     private Map<String,String> otherParas;
     private Map<String,String[]> ResultMap = new HashMap<String,String[]>() ;
     private Result4DS result4DS;
+    private String problemDS ;
     public boolean interrupt = false;
     public String ResultReport = "";
 
@@ -90,6 +91,7 @@ public class DSPreAnalysis extends Analysis{
             String sqlString = TemplateUtils.renderTpl(ca, sql);
             sqlAnalysis(dbname,dsname,sqlString);
         }catch(Exception e){
+            problemDS = dsname;
             this.analysisInterrput(2);
             interrupt = true;
         }
@@ -133,7 +135,7 @@ public class DSPreAnalysis extends Analysis{
                 break;
             case 2:
                 var[0] = cptName;
-                var[1] = "Template parameters error,ensuring accuracy ";
+                var[1] = "Template parameters error,please check the data set named '" + problemDS+"'";
                 ResultMap.clear();
                 ResultMap.put("tplparaserr",var);
                 ResultReport = new Result4Interrupt((HashMap) ResultMap).ObjectHandle();

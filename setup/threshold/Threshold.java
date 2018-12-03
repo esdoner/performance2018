@@ -11,7 +11,7 @@ public interface Threshold {
     void toggleSwitch();
 
     //设置和获取阈值
-    boolean setThreshold ();
+    void setThreshold (String var);
 
     String getThreshold ();
 

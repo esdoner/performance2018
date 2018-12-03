@@ -6,6 +6,6 @@ package com.fr.performance.startup;
  */
 public class StartThresholdTest {
     public static void main(String[] args){
-
+        System.out.println("哈哈哈");
     }
 }

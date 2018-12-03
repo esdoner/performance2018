@@ -17,6 +17,11 @@ public class URLReader {
         this.urlParse();
     }
 
+    /**
+    * @params []
+    * @return void
+    * @description:分离url地址和参数
+    */
     private void urlParse(){
         cUrl = cUrl.trim();
 
@@ -34,18 +39,11 @@ public class URLReader {
         }
     }
 
-    private void setParas(String var2){
-        paras = var2;
-    }
-
-    private void setNoParasurl(String var3){
-        noParasurl = var3;
-    }
-
-    private void setCUrl(String var4){
-        cUrl = var4;
-    }
-
+    /**
+    * @params []
+    * @return java.util.Map<java.lang.String,java.lang.String>
+    * @description: 按‘&’和‘=’拆分
+    */
     public Map<String,String> getParas(){
         Map<String,String> var5 = new HashMap<String,String>();
         if(paras == null || paras == ""){
@@ -77,5 +75,17 @@ public class URLReader {
             }
         }
         return str;
+    }
+
+    private void setParas(String var2){
+        paras = var2;
+    }
+
+    private void setNoParasurl(String var3){
+        noParasurl = var3;
+    }
+
+    private void setCUrl(String var4){
+        cUrl = var4;
     }
 }

@@ -1,3 +1,5 @@
 # Performance2018
 >tool for FR user
-## nothing to show ^0^
++ 性能检查
++ 更新方案
++ 模板制作建议

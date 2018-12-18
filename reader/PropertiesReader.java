@@ -39,7 +39,11 @@ public class PropertiesReader {
     * @description: none
     */
     public String readProperties(String propath,String prokey){
-        return readProperties(propath).get(prokey).toString();
+        if(propath != "" && prokey != "") {
+            return readProperties(propath).get(prokey).toString();
+        } else {
+            return null;
+        }
     }
 
     /**

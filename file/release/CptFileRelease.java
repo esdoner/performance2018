@@ -32,7 +32,7 @@ public class CptFileRelease implements FileRelease {
     private int Step;
     private boolean isInterrupt = true;
     private String releaseType;
-    public LinkedHashMap resultMap = new LinkedHashMap<String,String>();
+    public LinkedHashMap resultMap = new LinkedHashMap<String,String[][]>();
     public Result4Release rst4Release;
     public Gather2DB4Release rstGather;
     public String ResultReport = "";
@@ -55,11 +55,11 @@ public class CptFileRelease implements FileRelease {
     public void checkFile() {
         CptFileChecker cfc = new CptFileChecker(cptName,cptDirectory);
         cptPath = new File(cfc.getRootPath()+cfc.getFileInfo("cptdirectory")+cptName);
-        if(cfc.judgeExisted() && cfc.judgeHasAnalysed()) {
+        if(cfc.judgeExisted() && cfc.judgeHasAnalysed() && cfc.judgePassThreshold()) {
             setSubresult("success");
             Step = 1;
         } else {
-            setSubresult("fail");
+            setSubresult("fail",cfc.getFailMessage());
             setIsInterrupt(false);
         }
     }
@@ -159,9 +159,14 @@ public class CptFileRelease implements FileRelease {
 
     public void setIsInterrupt(boolean var){ isInterrupt = var; }
 
-    public final void setSubresult(String subresult){
-         String parentMethosName = Thread.currentThread().getStackTrace()[2].getMethodName();
-         resultMap.put(parentMethosName.toLowerCase(),subresult);
+    private void setSubresult(String subresult) {
+        String parentMethosName = Thread.currentThread().getStackTrace()[2].getMethodName();
+        resultMap.put(parentMethosName.toLowerCase(), new String[][]{{subresult},{}});
+    }
+
+    private void setSubresult(String subresult, String[] failMessage) {
+        String parentMethosName = Thread.currentThread().getStackTrace()[2].getMethodName();
+        resultMap.put(parentMethosName.toLowerCase(), new String[][]{{subresult},failMessage});
     }
 
     public void releaseStop(){

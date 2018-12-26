@@ -12,14 +12,14 @@ import java.util.Set;
  * Description:none
  */
 public class Result4Release extends ResultHandle {
-    private final String CHECKFILE = "¸üĞÂĞí¿É¼ì²é";
-    private final String VERIFYPATH = "Ä¿Â¼¼ì²é";
-    private final String BACKUPFILE = "±¸·İÎÄ¼ş";
-    private final String PREPAREFILE = "¸üĞÂÎÄ¼ş";
-    private final String RELEASEFILE = "Ìá½»¸üĞÂ";
-    private final String RESULTGATHER = "¼ÇÂ¼¸üĞÂ";
-    private final String SUCCESS = "³É¹¦";
-    private final String FAIL = "Ê§°Ü";
+    private final String CHECKFILE = "æ›´æ–°è®¸å¯æ£€æŸ¥";
+    private final String VERIFYPATH = "ç›®å½•æ£€æŸ¥";
+    private final String BACKUPFILE = "å¤‡ä»½æ–‡ä»¶";
+    private final String PREPAREFILE = "æ›´æ–°æ–‡ä»¶";
+    private final String RELEASEFILE = "æäº¤æ›´æ–°";
+    private final String RESULTGATHER = "è®°å½•æ›´æ–°";
+    private final String SUCCESS = "æˆåŠŸ";
+    private final String FAIL = "å¤±è´¥";
 
     public Result4Release(HashMap var1){
         super(var1);
@@ -59,7 +59,7 @@ public class Result4Release extends ResultHandle {
                     var7 = var7 + PropertiesReader.getInstance().readProperties(Threshold.propath, var6[i]) + FAIL;
                 }
             }
-            if(! var7.isEmpty()) var7="<p>¡ª¡ª"+var7+"</p>";
+            if(! var7.isEmpty()) var7="<p>â€”â€”"+var7+"</p>";
             multioutput = multioutput + "<li class='"+var5+"'><span>"+this.getClass().getDeclaredField(var2.toUpperCase()).get(this)+"</span><span>"+var4+"</span>"+var7+"</li>";
         }
         multioutput = multioutput + "</ul></div>";

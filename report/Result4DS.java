@@ -1,5 +1,7 @@
 package com.fr.performance.report;
 
+import com.fr.performance.reader.PropertiesReader;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -9,13 +11,13 @@ import java.util.Set;
  * Description:none
  */
 public class Result4DS extends ResultHandle {
-    private final String TABLE = "CPT·ÖÎö±¨¸æ";
-    private final String[] TITLE = {"Êı¾İ¼¯Í³¼Æ","Ö´ĞĞ¼Æ»®"};
-    private final String DBNAME = "Êı¾İÁ¬½Ó";
-    private final String DSNAME = "sqlÊı¾İ¼¯";
-    private final String T = "Ö´ĞĞÊ±¼ä/ms";
-    private final String L = "½á¹ûĞĞÊı";
-    private final String M = "Ô¤¹ÀÄÚ´æ/kb";
+    private final String TABLE = "CPTåˆ†ææŠ¥å‘Š";
+    private final String[] TITLE = {"æ•°æ®é›†ç»Ÿè®¡","æ‰§è¡Œè®¡åˆ’"};
+    private final String DBNAME = "æ•°æ®è¿æ¥";
+    private final String DSNAME = "sqlæ•°æ®é›†";
+    private final String T = "æ‰§è¡Œæ—¶é—´/ms";
+    private final String L = "ç»“æœè¡Œæ•°";
+    private final String M = "é¢„ä¼°å†…å­˜/kb";
     private String cptName = "";
     private String userName = "";
     private String storeoutput = "";

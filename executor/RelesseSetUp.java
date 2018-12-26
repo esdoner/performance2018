@@ -30,8 +30,9 @@ public class RelesseSetUp extends AbstractFunction {
             } else {
                 b.put(c[0] ,c[1]);
             }
+            Map d = PropertiesReader.ProCompare(Threshold.propath,b,true);
             //先要把文件中的，内存中的 配置 更新，用PropertiesReader.setupPro
-            PropertiesReader.getInstance().setupPro(Threshold.propath,b);
+            PropertiesReader.getInstance().setupPro(Threshold.propath,d);
             //用ThresholdBucket.reset();注意是clear()了的
             ThresholdBucket.getInstance().reset();
         }

@@ -1,8 +1,6 @@
 package com.fr.performance.reader;
 
-import java.io.BufferedReader;
-import java.io.FileOutputStream;
-import java.io.FileReader;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -23,9 +21,10 @@ public class PropertiesReader {
     /**
     * @params [propath]
     * @return java.util.Map
-    * @description: proMap中没有则先载入后返回，有的话直接返回当前的配置
+    * @description: 读取配置文件至内存返回Map
     */
     public Map readProperties(String propath){
+        //pro中没有就先载入
         if(! proMap.containsKey(propath)) {
             this.loadPro2Map(propath,proMap);
         }
@@ -36,7 +35,7 @@ public class PropertiesReader {
     /**
     * @params [propath, prokey]
     * @return java.lang.String
-    * @description: none
+    * @description: 读取具体配置项
     */
     public String readProperties(String propath,String prokey){
         if(propath != "" && prokey != "") {
@@ -46,25 +45,20 @@ public class PropertiesReader {
         }
     }
 
-    /**
-    * @params []
-    * @return java.util.Map
-    * @description: 仅返回所有配置列表
-    */
-    public Map readProperties(){
-        return proMap;
-    }
+    protected Map<String, Map> readProperties(){ return proMap; }
 
     /**
     * @params [propath, filepath]
     * @return java.util.Map
-    * @description: 仅将配置文件读入指定的Map
+    * @description: 仅将 配置文件 读入内存 指定的Map中，这里是proMap
     */
     private void loadPro2Map(String propath,Map promaps) {
         Map promap = new HashMap();
         try {
             Properties props = new Properties();
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(filepath+propath));
+            FileInputStream fis = new FileInputStream(filepath+propath);
+            InputStreamReader isr = new InputStreamReader(fis, "UTF-8");
+            BufferedReader bufferedReader = new BufferedReader(isr);
             props.load(bufferedReader);
             Enumeration en = props.propertyNames();
             while (en.hasMoreElements()) {
@@ -82,7 +76,7 @@ public class PropertiesReader {
     /**
     * @params [propath, prokeys, provalues]
     * @return boolean
-    * @description: 修改原配置文件的属性,顺序会变的问题再说
+    * @description: setupPro的第一步——修改 配置文件 的指定属性,顺序会变的问题再说
     */
     private synchronized boolean writePro2File(String propath,Map promap) {
         try{
@@ -107,7 +101,7 @@ public class PropertiesReader {
     /**
     * @params [propath]
     * @return boolean
-    * @description: 更新proMap，注销掉之前的proMap
+    * @description: setupPro的第二步——修改 配置文件 之后注销并更新 内存 中的proMap
     */
     private synchronized boolean reloadPro2Map(String propath) {
         Map proMap_c = new HashMap();
@@ -124,6 +118,10 @@ public class PropertiesReader {
         return true;
     }
 
+    /**
+    * @return void
+    * @description: 更新指定配置文件的制定属性，两步完成
+    */
     public void setupPro(String propath,Map promap){
         if(writePro2File(propath,promap)){
             if(reloadPro2Map(propath)){
@@ -134,5 +132,30 @@ public class PropertiesReader {
         } else {
             System.out.println("Write To Properties Failed");
         }
+    }
+
+    /**
+    * @return
+    * @description: 匹配出不同的配置的改变
+    */
+    public static Map ProCompare(String propath, Map promap, Boolean StrictMod) {
+        Set<Map.Entry> var1 = promap.entrySet();
+        Map var3 = PropertiesReader.getInstance().readProperties(propath);
+        String var4;
+        String var5;
+        Map var6 = new HashMap();
+        var6.putAll(promap);
+        for(Map.Entry<String, String> var2:var1){
+            var4 = var2.getKey();
+            var5 = var2.getValue();
+            if( var3.containsKey(var4) ){
+                if( var3.get(var4).equals(var5) ){
+                    var6.remove(var4);
+                }
+            } else if(StrictMod) {
+                 var6.remove(var4);
+            }
+        }
+        return var6;
     }
 }

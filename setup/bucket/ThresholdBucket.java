@@ -111,7 +111,6 @@ public class ThresholdBucket implements BucketBase {
                 Object var8 = var7.invoke(var6, var.getplate());
                 boolean var9 = hasLeavings(var8);
 
-                System.out.println(var2.getKey()+" "+var9);
                 if(!var9){var.putnotes("gameover",true);}
                 var.putnotes(var2.getKey(),var9);
             } catch (NoSuchMethodException e) {

@@ -1,10 +1,8 @@
 package com.fr.performance.reader;
 
-import com.fr.third.org.apache.commons.lang3.StringEscapeUtils;
-
 /**
  * Created by yuwh on 2018/12/3
- * Description:none
+ * Description:主要是为前台的需要转移的字符加上转义符号
  */
 public class EscapeStrReader {
     private final static String[] hex = {
@@ -86,25 +84,34 @@ public class EscapeStrReader {
                 sbuf.append((char)ch);
             } else if ('0' <= ch && ch <= '9') {
                 sbuf.append((char)ch);
-            } else if (ch == '-' || ch == '_' || ch == '.' || ch == '!' || ch == '~' || ch == '*' || ch == '\'' || ch == '"' || ch == '/' || ch == '(' || ch == ')') {
+            } else if (ch == '-' || ch == '_' || ch == '.' || ch == '!' || ch == '~' || ch == '*' || ch == '/' || ch == '(' || ch == ')') {
                 sbuf.append((char)ch);
             } else if (ch == '%') {
                 int cint = 0;
                 if ('u' != s.charAt(i+1)) {
+                    //单字节字符处理
                     cint = (cint << 4) | val[s.charAt(i+1)];
                     cint = (cint << 4) | val[s.charAt(i+2)];
                     i+=2;
                 } else {
+                    //unicode宽字节字符处理
                     cint = (cint << 4) | val[s.charAt(i+2)];
                     cint = (cint << 4) | val[s.charAt(i+3)];
                     cint = (cint << 4) | val[s.charAt(i+4)];
                     cint = (cint << 4) | val[s.charAt(i+5)];
                     i+=5;
                 }
-                sbuf.append((char)cint);
+                char target = (char)cint;
+                //需要添加转移的字符
+                if(target  == '"' || target  == '\''){
+                    sbuf.append('\\');
+                    sbuf.append((char)cint);
+                } else {
+                    sbuf.append((char)cint);
+                }
             }
             i++;
         }
-        return StringEscapeUtils.escapeJava(sbuf.toString());
+        return sbuf.toString();
     }
 }

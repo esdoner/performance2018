@@ -27,10 +27,10 @@ public abstract class SubThreshold implements Threshold{
     * @description: 全部 阈值 重载；为 内存 载入 配置文件 中，且在 prosArr 中的 阈值
     */
     public void loadThresholdIndex() {
-        onoffSwitch = Boolean.parseBoolean(PropertiesReader.getInstance().readProperties(propath,onoffKey));
+        onoffSwitch = Boolean.parseBoolean(PropertiesReader.getInstance().readProperties(PROPATH,onoffKey));
         String v;
         for (String s : prosArr) {
-            v = PropertiesReader.getInstance().readProperties(propath, s);
+            v = PropertiesReader.getInstance().readProperties(PROPATH, s);
             thresholdsMap.put(s, v);
         }
     }
@@ -44,7 +44,7 @@ public abstract class SubThreshold implements Threshold{
         Map changeList = new HashMap<String,String>();
         onoffSwitch = ! onoffSwitch;
         changeList.put(onoffKey,String.valueOf(onoffSwitch));
-        PropertiesReader.getInstance().setupPro(propath,changeList);
+        PropertiesReader.getInstance().setupPro(PROPATH,changeList);
     }
 
     /**
@@ -60,7 +60,7 @@ public abstract class SubThreshold implements Threshold{
                 changeList.put(var4.getKey(), var4.getValue());
             }
         }
-        PropertiesReader.getInstance().setupPro(propath,changeList);
+        PropertiesReader.getInstance().setupPro(PROPATH,changeList);
     }
 
     /**

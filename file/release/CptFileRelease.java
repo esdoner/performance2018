@@ -24,6 +24,7 @@ public class CptFileRelease implements FileRelease {
     private String branch;
     private String repository;
     private String cptitle;
+    private String reason;
     private final String cptDirectory = "/reportlets";
     private File cptPath;
     private File desPath;
@@ -37,7 +38,7 @@ public class CptFileRelease implements FileRelease {
     public Gather2DB4Release rstGather;
     public String ResultReport = "";
 
-    public CptFileRelease(String cptName, String desPath, String bakPath,String origin,String branch,String repository,String cptitle,String user,String psw,Map op) {
+    public CptFileRelease(String cptName, String desPath, String bakPath,String origin,String branch,String repository,String cptitle,String user,String psw, String reas,Map op) {
         this.cptName = cptName;
         this.username = user;
         this.password = psw;
@@ -47,6 +48,7 @@ public class CptFileRelease implements FileRelease {
         this.cptitle = cptitle;
         this.desPath = new File(desPath);
         this.bakPath = new File(bakPath);
+        this.reason = reas;
         this.option = op;
         Step = 0;
     }
@@ -55,7 +57,7 @@ public class CptFileRelease implements FileRelease {
     public void checkFile() {
         CptFileChecker cfc = new CptFileChecker(cptName,cptDirectory);
         cptPath = new File(cfc.getRootPath()+cfc.getFileInfo("cptdirectory")+cptName);
-        if(cfc.judgeExisted() && cfc.judgeHasAnalysed() && cfc.judgePassThreshold()) {
+        if(cfc.judgeExisted() && cfc.judgeHasAnalysed(reason.length() > 0) && cfc.judgePassThreshold()) {
             setSubresult("success");
             Step = 1;
         } else {
@@ -121,7 +123,7 @@ public class CptFileRelease implements FileRelease {
 
     @Override
     public void resultGather() {
-        rstGather = new Gather2DB4Release(cptName,releaseType,username);
+        rstGather = new Gather2DB4Release(cptName,releaseType,username,reason);
         if(rstGather.containerPrepare()){
             rstGather.containerGather();
         }

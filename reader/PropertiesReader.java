@@ -19,7 +19,7 @@ public class PropertiesReader {
     }
 
     /**
-    * @params [propath]
+    * @params [PROPATH]
     * @return java.util.Map
     * @description: 读取配置文件至内存返回Map
     */
@@ -33,13 +33,18 @@ public class PropertiesReader {
     }
 
     /**
-    * @params [propath, prokey]
+    * @params [PROPATH, prokey]
     * @return java.lang.String
     * @description: 读取具体配置项
     */
     public String readProperties(String propath,String prokey){
         if(propath != "" && prokey != "") {
-            return readProperties(propath).get(prokey).toString();
+            try {
+                return readProperties(propath).get(prokey).toString();
+            } catch(RuntimeException e) {
+                e.printStackTrace();
+                return null;
+            }
         } else {
             return null;
         }
@@ -48,7 +53,7 @@ public class PropertiesReader {
     protected Map<String, Map> readProperties(){ return proMap; }
 
     /**
-    * @params [propath, filepath]
+    * @params [PROPATH, filepath]
     * @return java.util.Map
     * @description: 仅将 配置文件 读入内存 指定的Map中，这里是proMap
     */
@@ -57,7 +62,7 @@ public class PropertiesReader {
         try {
             Properties props = new Properties();
             FileInputStream fis = new FileInputStream(filepath+propath);
-            InputStreamReader isr = new InputStreamReader(fis, "UTF-8");
+            InputStreamReader isr = new InputStreamReader(fis);
             BufferedReader bufferedReader = new BufferedReader(isr);
             props.load(bufferedReader);
             Enumeration en = props.propertyNames();
@@ -74,19 +79,21 @@ public class PropertiesReader {
     }
 
     /**
-    * @params [propath, prokeys, provalues]
+    * @params [PROPATH, prokeys, provalues]
     * @return boolean
     * @description: setupPro的第一步——修改 配置文件 的指定属性,顺序会变的问题再说
     */
     private synchronized boolean writePro2File(String propath,Map promap) {
         try{
             Properties props = new Properties();
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(filepath+propath));
+            FileInputStream fis = new FileInputStream(filepath+propath);
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader bufferedReader = new BufferedReader(isr);
             props.load(bufferedReader);
             for(Map.Entry<String,String> et : (Set<Map.Entry>)promap.entrySet()){
                 props.setProperty(et.getKey(),et.getValue());
             }
-            FileOutputStream fos = new FileOutputStream(filepath+propath);
+            FileOutputStream fos = new FileOutputStream(filepath+propath,false);
             props.store(fos,"");
             fos.close();
         } catch(Exception e) {
@@ -99,7 +106,7 @@ public class PropertiesReader {
     }
 
     /**
-    * @params [propath]
+    * @params [PROPATH]
     * @return boolean
     * @description: setupPro的第二步——修改 配置文件 之后注销并更新 内存 中的proMap
     */

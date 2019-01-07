@@ -9,7 +9,7 @@ import java.util.Map;
  * Description:none
  */
 public interface Threshold {
-    String propath = "com/fr/performance/setup/threshold.properties";
+    String PROPATH = "com/fr/performance/setup/threshold.properties";
 
     //载入阈值
     void loadThresholdIndex ();

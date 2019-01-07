@@ -4,6 +4,7 @@ import com.fr.base.*;
 import com.fr.data.impl.DBTableData;
 import com.fr.io.TemplateWorkBookIO;
 import com.fr.main.impl.WorkBook;
+import com.fr.main.workbook.ResultWorkBook;
 import com.fr.performance.gatherer.Gather2DB4DS;
 import com.fr.performance.reader.URLReader;
 import com.fr.performance.report.Result4DS;
@@ -11,6 +12,7 @@ import com.fr.performance.report.Result4Interrupt;
 import com.fr.performance.report.Result4NotFound;
 import com.fr.script.Calculator;
 import com.fr.stable.ParameterProvider;
+import com.fr.stable.WriteActor;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -27,8 +29,9 @@ public class DSPreAnalysis extends Analysis{
     private String cptName;
     private String userName;
     private String singleSQL;
-    private Map<String,String> otherParas;
-    private Map<String,String[]> ResultMap = new HashMap<String,String[]>() ;
+    private Map<String,Object> otherParas;
+    private Map<String,String[]> DSResultMap = new HashMap<>() ;
+    private Map<String,String> CPTResultMap = new HashMap<>() ;
     private Result4DS result4DS;
     private String problemDS ;
     public boolean interrupt = false;
@@ -41,6 +44,11 @@ public class DSPreAnalysis extends Analysis{
         otherParas = new URLReader(outerParas).getParas();
         try {
             workbook = (WorkBook) TemplateWorkBookIO.readTemplateWorkBook(cptName);
+            long t1 = System.currentTimeMillis();
+            ResultWorkBook exeResult = workbook.execute(otherParas,new WriteActor());
+            long t2 = System.currentTimeMillis();
+            CPTResultMap.put("cptname",cptName);
+            CPTResultMap.put("ttime",String.valueOf(t2-t1));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -79,7 +87,7 @@ public class DSPreAnalysis extends Analysis{
         }
     }
 
-    private void addParas(Map<String,String> otherparas){
+    private void addParas(Map<String,Object> otherparas){
         parameterMap.putAll(otherparas);
     }
 
@@ -109,15 +117,15 @@ public class DSPreAnalysis extends Analysis{
         m = qA.getMemoryConsum();
         e = qA.getQueryExplain();
         qA.analysistop();
-        ResultMap.put(dsname,new String[]{dbname,e,String.valueOf(t), String.valueOf(l), String.valueOf(m)});
+        DSResultMap.put(dsname,new String[]{dbname,e,String.valueOf(t), String.valueOf(l), String.valueOf(m)});
     }
 
     public void analysistop(){
         /*consuming report*/
-        result4DS = new Result4DS(cptName, userName, (HashMap) ResultMap);
+        result4DS = new Result4DS((HashMap)CPTResultMap, userName, (HashMap) DSResultMap);
         ResultReport = result4DS.objectHandle();
         /*result gather*/
-        Gather2DB4DS ResultGather = new Gather2DB4DS(cptName, result4DS.getStoreHtml(), userName,ResultMap,URLReader.getParasString(otherParas));
+        Gather2DB4DS ResultGather = new Gather2DB4DS(CPTResultMap, result4DS.getStoreHtml(), userName,DSResultMap,URLReader.getParasString(otherParas));
         if(ResultGather.containerPrepare()){
             ResultGather.containerGather();
         }
@@ -129,16 +137,16 @@ public class DSPreAnalysis extends Analysis{
             case 1:
                 var[0] = cptName;
                 var[1] = "The specified template path was not found";
-                ResultMap.clear();
-                ResultMap.put("tplnotfound",var);
-                ResultReport = new Result4NotFound((HashMap) ResultMap).ObjectHandle();
+                DSResultMap.clear();
+                DSResultMap.put("tplnotfound",var);
+                ResultReport = new Result4NotFound((HashMap) DSResultMap).ObjectHandle();
                 break;
             case 2:
                 var[0] = cptName;
                 var[1] = "Template parameters error,please check the data set named '" + problemDS+"'";
-                ResultMap.clear();
-                ResultMap.put("tplparaserr",var);
-                ResultReport = new Result4Interrupt((HashMap) ResultMap).ObjectHandle();
+                DSResultMap.clear();
+                DSResultMap.put("tplparaserr",var);
+                ResultReport = new Result4Interrupt((HashMap) DSResultMap).ObjectHandle();
                 break;
             default:
                 ResultReport = this.analysisInterrput();

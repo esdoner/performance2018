@@ -1,6 +1,5 @@
 package com.fr.performance.setup.threshold;
 
-import com.fr.performance.judge.calculator.ThresholdCalculator;
 import com.fr.performance.reader.PropertiesReader;
 
 /**
@@ -10,7 +9,7 @@ import com.fr.performance.reader.PropertiesReader;
 public final class ThresholdStability extends PrimaryThreshold {
     public ThresholdStability(){
         onoffKey = "Switch4StabilityThreshold";
-        onoffSwitch = Boolean.parseBoolean(PropertiesReader.getInstance().readProperties(propath,onoffKey));
+        onoffSwitch = Boolean.parseBoolean(PropertiesReader.getInstance().readProperties(PROPATH,onoffKey));
         thd = createThresholdCalculator();
     }
 }

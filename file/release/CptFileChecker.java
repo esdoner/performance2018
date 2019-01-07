@@ -55,25 +55,36 @@ public class CptFileChecker {
 
     }
 
+    /**
+    * @params []
+    * @return int
+    * @description: result 0是明确不通过，1是通过，-1是待定，需要备注并遵从CptFileRelease
+    */
     private int initFileRecentAnalysis(){
-        int result = 0;
+        int result = 0 ;
+        int result_p = 0;
+        int result_t = 0;
         //是否已经性能检查
         Connect2DB4Mysql conn = new Connect2DB4Mysql("performance2018");
-        String queryString = "SELECT 1,test_time_max,test_index1_max,test_index2_max FROM cptanalysis_record " +
+        String queryString = "SELECT test_path,test_time_max,test_index1_max,test_index2_max,test_ttime FROM cptanalysis_record " +
                 "WHERE test_valid = 1 AND UNIX_TIMESTAMP(now())-3600 <= test_time AND test_path = '"+fileInfo.get("cptname")+"' ORDER BY test_time DESC LIMIT 1";
         if(conn.createCon()){
             try{
                 ResultSet queryRst = conn.executeDQL(queryString);
-                while(queryRst.next()){
-                    fileQualifications.put("WarningLineNumber", queryRst.getString(3));
-                    fileQualifications.put("MaxLineNumber", queryRst.getString(3));
+                if(queryRst.next()){
                     fileQualifications.put("WarningTimeConsume", queryRst.getString(2));
                     fileQualifications.put("MaxTimeConsume",queryRst.getString(2));
+                    fileQualifications.put("WarningLineNumber", queryRst.getString(3));
+                    fileQualifications.put("MaxLineNumber", queryRst.getString(3));
                     fileQualifications.put("WarningMemoryConsume", queryRst.getString(4));
                     fileQualifications.put("MaxMemoryConsume", queryRst.getString(4));
+                    fileQualifications.put("WarningTotalTime", queryRst.getString(5));
+                    fileQualifications.put("MaxTotalTime", queryRst.getString(5));
                     fileQualifications.put("WarningDBRetrievalNumber", "0");
                     fileQualifications.put("MaxDBRetrievalNumber", "0");
-                    result = queryRst.getInt(1);
+                    result_p = 1;
+                } else {
+                    failmessage.add("performanceanalysised");
                 }
             }catch(SQLException e){
                 e.printStackTrace();
@@ -81,22 +92,32 @@ public class CptFileChecker {
                 conn.closeCon();
             }
         }
-        //是否已经稳定性检查，大部分还未强制检查,所以先默认是过关的
-        fileQualifications.put("TestCaseRequire","1");
+        //是否已经稳定性检查，大部分还未强制检查，没有的要记录下说明
         Connect2DB4Mysql conn1 = new Connect2DB4Mysql("testcase2018");
-        String queryString1 = "SELECT 1 FROM test_case_demand JOIN test_case_cpt ON cpt_id = demand_cpt " +
-                "WHERE demand_ifpass = 0 AND concat('/',cpt_path,'/',cpt_filename) = '"+fileInfo.get("cptname")+"' LIMIT 1";
+        //null的需要说明，有0的不过关，全是1才过关
+        String queryString1 = "SELECT (1-demand_ifpass) AS demand_ifpass FROM test_case_demand JOIN test_case_cpt ON cpt_id = demand_cpt "
+                + "WHERE CONCAT('/',cpt_path,'/',cpt_filename) = '" + fileInfo.get("cptname") + "' ORDER BY demand_ifpass ASC LIMIT 1";
         if(conn1.createCon()){
             try{
                 ResultSet queryRst1 = conn1.executeDQL(queryString1);
-                while(queryRst1.next()){
-                    fileQualifications.put("TestCaseRequire","0");
+                if(queryRst1.next()){
+                    fileQualifications.put("TestCaseRequire",queryRst1.getString(1));
+                    result_t = 1;
+                } else {
+                    failmessage.add("testcaseanalysised");
                 }
             }catch(SQLException e){
                 e.printStackTrace();
             } finally{
                 conn1.closeCon();
             }
+        }
+        if(result_p * result_t == 1){
+            result = 1;
+        } else if(result_t == 0){
+            result = -1;
+        } else {
+            result = 0;
         }
         return result;
     }
@@ -123,12 +144,14 @@ public class CptFileChecker {
         return fileInfo.get(key);
     }
 
-    public boolean judgeHasAnalysed(){
+    public boolean judgeHasAnalysed(Boolean reason){
         String var1 = getFileInfo("analysised");
-        if(var1.indexOf("1")>=0){
+        if(var1.equals("1")){
             return true;
-        }else{
-            failmessage.add("fileanalysised");
+        } else if(var1.equals("-1") && reason) {
+            fileQualifications.put("TestCaseRequire","1");
+            return true;
+        } else {
             return false;
         }
     }

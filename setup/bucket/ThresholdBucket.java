@@ -16,7 +16,7 @@ import java.util.Set;
 public class ThresholdBucket implements BucketBase {
     private static ThresholdBucket ourInstance= new ThresholdBucket();
     private static String[][] thresholdNames= {
-            {"Performance","LineNumber","TimeConsume","MemoryConsume","DBRetrievalNumber"},
+            {"Performance","LineNumber","TimeConsume","MemoryConsume","DBRetrievalNumber","TotalTime"},
             {"Stability","TestCase"}
     };
     private LinkedHashMap<String,Object> thresholdMap = new LinkedHashMap<String,Object>();

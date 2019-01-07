@@ -14,12 +14,14 @@ public class Gather2DB4DS extends Gather2DB{
     private String paras;
     private String result;
     private String name;
-    private  String queryIndexStr;
+    private String queryIndexStr;
+    private String ttime;
 
-    public Gather2DB4DS(String var1, String var2, String var3, Map<String, String[]> var4, String var5) {
+    public Gather2DB4DS(Map var1, String var2, String var3, Map<String, String[]> var4, String var5) {
         super("performance2018");
         setContainerType("2DB4DS");
-        path = var1;
+        path = String.valueOf(var1.get("cptname"));
+        ttime = String.valueOf(var1.get("ttime"));
         result = var2;
         name = var3;
         queryIndexStr = makeIndex((HashMap) var4);
@@ -46,8 +48,8 @@ public class Gather2DB4DS extends Gather2DB{
     @Override
     public boolean containerPrepare() {
         result = htmParser(result);
-        String fields = "test_paras,test_path,test_result,test_name,test_time,test_time_min,test_index1_min,test_index2_min,test_time_max,test_index1_max,test_index2_max";
-        sqlString = "INSERT INTO cptanalysis_record("+fields+") VALUES ('"+paras+"','"+path+"','"+result+"','"+name+"', UNIX_TIMESTAMP(),"+queryIndexStr+")";
+        String fields = "test_paras,test_path,test_result,test_name,test_time,test_time_min,test_index1_min,test_index2_min,test_time_max,test_index1_max,test_index2_max,test_ttime";
+        sqlString = "INSERT INTO cptanalysis_record("+fields+") VALUES ('"+paras+"','"+path+"','"+result+"','"+name+"', UNIX_TIMESTAMP(),"+queryIndexStr+","+ttime+")";
         if(sqlString.isEmpty()){
             return false;
         }else{

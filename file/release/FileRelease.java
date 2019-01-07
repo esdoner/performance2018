@@ -5,6 +5,9 @@ package com.fr.performance.file.release;
  * Description:none
  */
 public interface FileRelease {
+    String PROPATHOFRELEASE = "com/fr/performance/file/release/release.properties";
+    String PROPATHOFFILE = "com/fr/performance/file/release/file.properties";
+
     void checkFile();
 
     void verifyPath();

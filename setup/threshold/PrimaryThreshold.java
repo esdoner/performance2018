@@ -27,7 +27,7 @@ public abstract class PrimaryThreshold implements Threshold{
         Map changeList = new HashMap<String,String>();
         onoffSwitch = ! onoffSwitch;
         changeList.put(onoffKey,String.valueOf(onoffSwitch));
-        PropertiesReader.getInstance().setupPro(propath,changeList);
+        PropertiesReader.getInstance().setupPro(PROPATH,changeList);
     }
 
     @Override

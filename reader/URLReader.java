@@ -44,8 +44,8 @@ public class URLReader {
     * @return java.util.Map<java.lang.String,java.lang.String>
     * @description: 按‘&’和‘=’拆分
     */
-    public Map<String,String> getParas(){
-        Map<String,String> var5 = new HashMap<String,String>();
+    public Map<String,Object> getParas(){
+        Map<String,Object> var5 = new HashMap<String,Object>();
         if(paras == null || paras == ""){
             return var5;
         }
@@ -61,13 +61,13 @@ public class URLReader {
         return var5;
     }
 
-    public static String getParasString(Map<String,String> parasMap){
+    public static String getParasString(Map<String,Object> parasMap){
         String str = "";
         String key = "";
         String val = "";
-        for(Map.Entry<String, String> ent : parasMap.entrySet()){
+        for(Map.Entry<String, Object> ent : parasMap.entrySet()){
             key = ent.getKey();
-            val = ent.getValue();
+            val = ent.getValue().toString();
             if(str == ""){
                 str += key+"="+val;
             }else{

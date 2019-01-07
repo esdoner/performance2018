@@ -1,5 +1,6 @@
 package com.fr.performance.report;
 
+import com.fr.performance.file.release.FileRelease;
 import com.fr.performance.reader.PropertiesReader;
 import com.fr.performance.setup.threshold.Threshold;
 
@@ -53,10 +54,19 @@ public class Result4Release extends ResultHandle {
             String var5 = var3 == "success" ? "release_sub_success" : "release_sub_fail" ;
             String[] var6 = var1.getValue()[1];
             String var7 = "";
+            String var8;
+            String var9;
             if(var3 != "success") {
                 for (int i = 0; i < var6.length; i++) {
-                    var7 = var7 =="" ? var7 : var7 + " , ";
-                    var7 = var7 + PropertiesReader.getInstance().readProperties(Threshold.propath, var6[i]) + FAIL;
+                    var8 = PropertiesReader.getInstance().readProperties(Threshold.PROPATH, var6[i]);
+                    var9 = PropertiesReader.getInstance().readProperties(FileRelease.PROPATHOFFILE, var6[i]);
+                    if( !(var8 == null && var9 == null) ) {
+                        var7 = var7 =="" ? var7 : var7 + " , ";
+                        var7 = var7 + (var8 == null? var9 :var8) + FAIL;
+                    } else {
+                        continue;
+                    }
+
                 }
             }
             if(! var7.isEmpty()) var7="<p>——"+var7+"</p>";

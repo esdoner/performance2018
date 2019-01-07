@@ -89,12 +89,12 @@ public class EscapeStrReader {
             } else if (ch == '%') {
                 int cint = 0;
                 if ('u' != s.charAt(i+1)) {
-                    //单字节字符处理
+                    //单字节字符处理十六-二
                     cint = (cint << 4) | val[s.charAt(i+1)];
                     cint = (cint << 4) | val[s.charAt(i+2)];
                     i+=2;
                 } else {
-                    //unicode宽字节字符处理
+                    //unicode宽字节字符处理十六-二
                     cint = (cint << 4) | val[s.charAt(i+2)];
                     cint = (cint << 4) | val[s.charAt(i+3)];
                     cint = (cint << 4) | val[s.charAt(i+4)];
@@ -113,5 +113,14 @@ public class EscapeStrReader {
             i++;
         }
         return sbuf.toString();
+    }
+    public static String[] unescape(Object[] objs){
+        String[] strs = new String[objs.length];
+        for(int i = 0; i< objs.length; i++){
+            if(objs[i] instanceof String){
+                strs[i] = unescape(objs[i].toString());
+            }
+        }
+        return strs;
     }
 }

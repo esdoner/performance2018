@@ -110,11 +110,15 @@ public class CptFileRelease implements FileRelease {
         String path = repository+"\\.git";
         GitBasicHandler a = new GitBasicHandler(path);
         a.insertAuth(username,password,origin,branch);
-        a.addOperation((cptitle + cptName).substring(1));
-        a.commitOperation(releaseType+" "+ cptName);
-        if(a.pushOperation()){
-            setSubresult("success");
-            Step = 5;
+        if(a.addOperation((cptitle + cptName).substring(1))){
+            a.commitOperation(releaseType+" "+ cptName);
+            if(a.pushOperation()){
+                setSubresult("success");
+                Step = 5;
+            } else {
+                setSubresult("fail");
+                setIsInterrupt(false);
+            }
         } else {
             setSubresult("fail");
             setIsInterrupt(false);

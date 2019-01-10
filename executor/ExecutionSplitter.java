@@ -18,8 +18,8 @@ public class ExecutionSplitter extends AbstractFunction {
     public ExecutionSplitter(){ packageName = this.getClass().getPackage().getName(); }
 
     @Override
-    public Object run(Object[] objects) {
-        Object result = null;
+    public String run(Object[] objects) {
+        String result = "";
         if(objects == null){
             throw new RuntimeException("No FunctionName Found In Request");
         } else {
@@ -33,7 +33,7 @@ public class ExecutionSplitter extends AbstractFunction {
                     Class c = Class.forName(className);
                     Method m = c.getDeclaredMethod("fetchResult", Object[].class);
                     Object o = c.newInstance();
-                    result = m.invoke(o, (Object) this.objects );
+                    result = String.valueOf(m.invoke(o, (Object) this.objects ));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

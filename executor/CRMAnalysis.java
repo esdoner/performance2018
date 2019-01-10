@@ -17,7 +17,7 @@ public class CRMAnalysis extends AbstractFunction {
         return fetchResult(objects);
     }
 
-    public String fetchResult(Object[] objects){
+    protected String fetchResult(Object[] objects){
         DSPreAnalysis var1 = new DSPreAnalysis( unescape(objects[0].toString()), unescape(objects[1].toString()), unescape(objects[2].toString()) );
         if(var1.judgeWorkbook()) {
             var1.analysistart();

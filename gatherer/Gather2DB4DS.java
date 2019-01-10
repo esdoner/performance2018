@@ -32,24 +32,38 @@ public class Gather2DB4DS extends Gather2DB{
         ArrayList<Integer> indexXMin = new ArrayList<>(2);
         ArrayList<Integer> indexXMax = new ArrayList<>(2);
         Set<Map.Entry> var6 = var5.entrySet();
-        for(Map.Entry<String,String[]> var7:var6){
-            String[] var8 = var7.getValue();
-            short i = 2;
-            while(i + 1 <= var8.length) {
-                if(indexXMax.size() < i-1 ||  indexXMin.size() < i-1){ indexXMax.add(Integer.parseInt(var8[i]));indexXMin.add(Integer.parseInt(var8[i])); }
-                if (Integer.parseInt(var8[i]) > indexXMax.get(i-2)) { indexXMax.set(i-2 , Integer.parseInt(var8[i])); }
-                if (Integer.parseInt(var8[i]) < indexXMin.get(i-2)) { indexXMin.set(i-2 , Integer.parseInt(var8[i])); }
-                i++;
+        if(var6.size() > 0 ) {
+            for (Map.Entry<String, String[]> var7 : var6) {
+                String[] var8 = var7.getValue();
+                short i = 2;
+                while (i + 1 <= var8.length) {
+                    if (indexXMax.size() < i - 1 || indexXMin.size() < i - 1) {
+                        indexXMax.add(Integer.parseInt(var8[i]));
+                        indexXMin.add(Integer.parseInt(var8[i]));
+                    }
+                    if (Integer.parseInt(var8[i]) > indexXMax.get(i - 2)) {
+                        indexXMax.set(i - 2, Integer.parseInt(var8[i]));
+                    }
+                    if (Integer.parseInt(var8[i]) < indexXMin.get(i - 2)) {
+                        indexXMin.set(i - 2, Integer.parseInt(var8[i]));
+                    }
+                    i++;
+                }
             }
+            return indexXMin.toString().replaceAll("[\\[\\]]", "") + "," + indexXMax.toString().replaceAll("[\\[\\]]", "");
+        }else{
+            return "";
         }
-        return indexXMin.toString().replaceAll("[\\[\\]]","") + "," + indexXMax.toString().replaceAll("[\\[\\]]","");
     }
 
     @Override
     public boolean containerPrepare() {
         result = htmParser(result);
+        queryIndexStr = queryIndexStr== ""? "0,0,0,0,0,0": queryIndexStr;
+        paras = paras== ""? "null": "'"+paras+"'";
+        result = result== ""? "null": "'"+result+"'";
         String fields = "test_paras,test_path,test_result,test_name,test_time,test_time_min,test_index1_min,test_index2_min,test_time_max,test_index1_max,test_index2_max,test_ttime";
-        sqlString = "INSERT INTO cptanalysis_record("+fields+") VALUES ('"+paras+"','"+path+"','"+result+"','"+name+"', UNIX_TIMESTAMP(),"+queryIndexStr+","+ttime+")";
+        sqlString = "INSERT INTO cptanalysis_record("+fields+") VALUES ("+paras+",'"+path+"',"+result+",'"+name+"', UNIX_TIMESTAMP(),"+queryIndexStr+","+ttime+")";
         if(sqlString.isEmpty()){
             return false;
         }else{

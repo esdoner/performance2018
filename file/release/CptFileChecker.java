@@ -18,7 +18,7 @@ import java.util.*;
 
 /**
  * Created by yuwh on 2018/10/10
- * Description:none
+ * Description:这个类有点乱，计划改下
  */
 public class CptFileChecker {
     private String rPath;
@@ -114,10 +114,12 @@ public class CptFileChecker {
         }
         if(result_p * result_t == 1){
             result = 1;
-        } else if(result_t == 0){
+        } else if(result_t < result_p){
+            result = 0;
+        } else if(result_t > result_p){
             result = -1;
         } else {
-            result = 0;
+            result = -2;
         }
         return result;
     }
@@ -148,9 +150,14 @@ public class CptFileChecker {
         String var1 = getFileInfo("analysised");
         if(var1.equals("1")){
             return true;
-        } else if(var1.equals("-1") && reason) {
-            fileQualifications.put("TestCaseRequire","1");
+        } else if(var1.equals("0") && reason) {
+            fileQualifications.put("TestCaseRequire", "1");
+            failmessage.remove("testcaseanalysised");
             return true;
+        }else if(var1.equals("-2") && reason) {
+            fileQualifications.put("TestCaseRequire","1");
+            failmessage.remove("testcaseanalysised");
+            return false;
         } else {
             return false;
         }

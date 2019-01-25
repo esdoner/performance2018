@@ -59,7 +59,7 @@ public class Result4Release extends ResultHandle {
             if(var3 != "success") {
                 for (int i = 0; i < var6.length; i++) {
                     var8 = PropertiesReader.getInstance().readProperties(Threshold.PROPATH, var6[i]);
-                    var9 = PropertiesReader.getInstance().readProperties(FileRelease.PROPATHOFFILE, var6[i]);
+                    var9 = PropertiesReader.getInstance().readProperties(FileRelease.PROPATHOFRELEASE, var6[i]);
                     if( !(var8 == null && var9 == null) ) {
                         var7 = var7 =="" ? var7 : var7 + " , ";
                         var7 = var7 + (var8 == null? var9 :var8) + FAIL;

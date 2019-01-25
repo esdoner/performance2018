@@ -4,7 +4,7 @@ import com.fr.script.AbstractFunction;
 
 import java.lang.reflect.Method;
 
-import static com.fr.performance.reader.ClassInfoReader.judgeClassExists;
+import static com.fr.performance.reader.ClassInfoReader.*;
 
 /**
  * Created by yuwh on 2018/12/27
@@ -15,7 +15,7 @@ public class ExecutionSplitter extends AbstractFunction {
     private String className;
     private Object[] objects;
 
-    public ExecutionSplitter(){ packageName = this.getClass().getPackage().getName(); }
+    public ExecutionSplitter(){ packageName = getPackName(this.getClass(), false); }
 
     @Override
     public String run(Object[] objects) {

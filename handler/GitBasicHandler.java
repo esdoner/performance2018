@@ -35,12 +35,8 @@ public final class GitBasicHandler {
 
     public boolean addOperation(String despath){
         try {
-            if(diffOperation(despath)){
-                cgit.add().addFilepattern(despath).call();
-                return true;
-            } else {
-                return false;
-            }
+            cgit.add().addFilepattern(despath).call();
+            return true;
         } catch (GitAPIException e) {
             e.printStackTrace();
             return false;

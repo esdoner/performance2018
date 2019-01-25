@@ -24,15 +24,23 @@ public class CptRelease extends AbstractFunction {
 
     protected String fetchResult(Object[] objects){
         strings  = unescape(objects);
+        //在配置文件中取出和更新相关的配置值
         Map var1  = PropertiesReader.getInstance().readProperties(FileRelease.PROPATHOFRELEASE);
+        //模板更新路径
         String var2 = var1.get("SpecifiedCPTReleasePath").toString();
+        //模板备份路径
         String var3 = var1.get("SpecifiedCPTBackUpPath").toString();
+        //originname
         String var4 = var1.get("GitRemoteOriginName").toString();
+        //branchname
         String var5 = var1.get("GitRemoteBranchName").toString();
+        //仓库根目录，包含.git文件夹
         String var6 = var1.get("GitRepositoryRoot").toString();
+        //模板默认路径截断，用于非reportlets仓库，可为空
         String var7 = var1.get("CptDefaultPathTitle").toString();
 
         Map op = new HashMap<String, Boolean>();
+        //
         op.put("mkdir",true);
         if(objects[3].toString().indexOf("true")>=0) {
             op.put("bakbak", false);

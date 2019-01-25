@@ -13,8 +13,8 @@ import java.util.Map;
  * Created by yuwh on 2018/12/17
  * Description:none
  */
-public class RelesseSetUp extends AbstractFunction {
-    public RelesseSetUp() {
+public class ReleaseSetUp extends AbstractFunction {
+    public ReleaseSetUp() {
     }
 
     public Object run(Object[] objects) {

@@ -12,7 +12,12 @@ import java.util.List;
  */
 public abstract class ClassInfoReader {
 
-    public static List<Class<?>> getClassInfo(String packageName) {
+    /*
+    * @params [packageName]
+    * @return java.util.List<java.lang.Class<?>>
+    * @description: 仅根据包名查找所有类
+    */
+    public static List<Class<?>> getClasses(String packageName) {
         URL url;
         File file;
         File[] fls;
@@ -46,8 +51,13 @@ public abstract class ClassInfoReader {
         }
     }
 
+    /*
+    * @params [packageName, className]
+    * @return boolean
+    * @description: 某包下是否有指定类
+    */
     public static boolean judgeClassExists(String packageName, String className){
-        List<Class<?>> list = getClassInfo(packageName);
+        List<Class<?>> list = getClasses(packageName);
         boolean result = false;
         try {
             Class<?> c = Class.forName(className);
@@ -61,5 +71,9 @@ public abstract class ClassInfoReader {
         }
     }
 
-    public abstract Object getPackInfo();
+    public static String getPackName(Class cs, boolean includeClass){
+        String result;
+        result = includeClass? cs.getName(): cs.getPackage().getName();
+        return result;
+    }
 }

@@ -1,6 +1,10 @@
 package com.fr.performance.reader;
 
-import java.io.*;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
 import java.util.*;
 
 /**
